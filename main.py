@@ -15,12 +15,8 @@ video_link = input("Enter the link for the video to download - ")
 try:
     youtube = pytube.YouTube(video_link)
 except:
-    if len(video_link) < 35:
-        print("Invalid Link provided")
-        quit()
-    else:
-        print("Connect to Internet first!")
-        quit()
+    print("Invalid Link provided")
+    quit()
 
 # Getting the save path
 save_path = input("Enter the save path (format - 'disk:/folder/name' e.g. 'E:/yt_downloads') - ") 
