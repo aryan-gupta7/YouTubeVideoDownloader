@@ -31,7 +31,12 @@ except:
     quit()
 
 # Getting the first video of all the streams
-video = youtube.streams.first()
+try:
+    video = youtube.streams.first()
+except:
+    print("Please connect to internet first!")
+    quit()
+
 title = video.title
 
 # Creating a loading bar.
