@@ -1,5 +1,6 @@
 # Importing Required Packages.
 import os
+import time
 import pytube
 import subprocess
 from tqdm import tqdm
@@ -40,12 +41,14 @@ except:
 title = video.title
 
 # Creating a loading bar.
-for i in tqdm(range(1),desc=f'Downloading {title[:20]}...'):
+for i in tqdm(range(100),desc=f'Downloading {title[:20]}...'):
     try:
         # Downloading video to the save path
-        video.download(save_path) 
+        if i == 0: video.download(save_path) 
     except: 
-        print("Some Error!") 
+        print("Some Error!")
+        break
+    time.sleep(.1)
 
 # Getting the Filename.
 files_in_dir = os.listdir(save_path)
