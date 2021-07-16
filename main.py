@@ -1,62 +1,57 @@
-# Importing Required Packages.
 import os
-import time
 import pytube
-import subprocess
-from tqdm import tqdm
+save_path = "C:\\Users\\User\\Desktop\\songs\\playlist" #Enter path where to save
+links = [
+    {"link": "https://youtu.be/xCBUG-hyKnc?list=PLVJX5FVbNKoLsXh-IGcLP2Jin9OHijNC9", "type": "playlist", "extension": "mp3"}
+]#Enter links of youtube video in format of dict. {"link": videoLink, "type": "playlist or video", "extension": "mp3 or mp4 in which to download"}
 
-
-print("Hey there...\nThis is a python program developed by Aryan Gupta to download youtube video through links.")
-
-# Getting Video link through input/
-video_link = input("Enter the link for the video to download - ")
-
-# Checking if link is INVALID
-try:
-    youtube = pytube.YouTube(video_link)
-except:
-    print("Invalid Link provided")
-    quit()
-
-# Getting the save path
-save_path = input("Enter the save path (format - 'disk:/folder/name' e.g. 'E:/yt_downloads') - ") 
-# Checking if the path is valid.
-try:
-    os.chdir(save_path)
-except:
-    print("Wrong path provided!")
-    quit()
-
-# Getting the first video of all the streams
-try:
-    video = youtube.streams.first()
-except:
-    print("Please connect to internet first!")
-    quit()
-
-title = video.title
-
-# Creating a loading bar.
-for i in tqdm(range(100),desc=f'Downloading {title[:20]}...'):
+def download(video_link, extension):
     try:
-        # Downloading video to the save path
-        if i == 0: video.download(save_path) 
+        youtube = pytube.YouTube(video_link)
+    except:
+        print("Invalid Link provided")
+        quit()
+
+    try:
+        os.chdir(save_path)
+    except:
+        print("Wrong path provided!")
+        quit()
+    video = youtube.streams.filter(only_audio=True).first()
+    try:
+        if extension == "mp3":
+            video = youtube.streams.filter(only_audio=True).first()
+        elif extension == "mp4":
+            video = youtube.streams.first()
+        else:
+            print(f"Invalid extension = {extension}")
+            print("Extension should be any of 'mp3' or 'mp4'")
+            quit()
+    except Exception as e:
+        print(f"Error = {e}")
+        print("Check your network connection")
+        quit()
+
+    try:
+        video.download(save_path)
+        print(f'{video.title[:40]} - {extension} downloaded to {save_path}')
     except: 
-        print("Some Error!")
-        break
-    time.sleep(.1)
+        print(f"{video.title[:40]} - Some Error!")
 
-# Getting the Filename.
-files_in_dir = os.listdir(save_path)
-for i in files_in_dir:
-    if not i.endswith(".mp4"):
-        files_in_dir.pop(files_in_dir.index(i))
-filename = ''
-for video in files_in_dir:
-    if video[:5] == title[:5]:
-        filename = video
-
-# Opening the file explorer with selected downloaded video.
-filepath = os.path.abspath(filename)
-print(f'Video downloaded to {filepath}')
-subprocess.Popen(f'explorer /select, "{filepath}"')
+if __name__ == "__main__":
+    print("A youtube video/audio downloader for you made by aryan with collab. of akshat(jrke)!")
+    for download_ in links:
+        try:
+            if download_["type"] == "video":
+                download(download_["link"], download_["extension"])
+            elif download_["type"] == "playlist":
+                playlist = pytube.Playlist(download_["link"])
+                print(f"Downloading {len(playlist.video_urls)} songs from playlist {playlist.title} by {playlist.owner}!")
+                for link in playlist.video_urls:
+                    download(link, download_["extension"])
+            else:
+                print(f"Invalid type = {download_['type']}")
+                print("Type should be any of 'video' or 'playlist'")
+        except Exception as E:
+            print("Unexpected Error =", E)
+            print("Check your network, typos, links, etc.")
