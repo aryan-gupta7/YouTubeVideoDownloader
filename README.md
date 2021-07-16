@@ -1,9 +1,9 @@
 # YouTube Video Downloader
+A programme to download youtube video or all videos from a playlist in required format 'mp3' or 'mp4'.
 ### Prerequisites
 * Installed Python3.6 or higher
 ### Libraries required
 * PyTube -  install with `pip install pytube`
-* tqdm - install with `pip install tqdm`
 
 Or you can simply download all required libraries by `pip install -r requirements.txt`
 
