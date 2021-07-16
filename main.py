@@ -17,7 +17,6 @@ def download(video_link, extension):
     except:
         print("Wrong path provided!")
         quit()
-    video = youtube.streams.filter(only_audio=True).first()
     try:
         if extension == "mp3":
             video = youtube.streams.filter(only_audio=True).first()
