@@ -5,17 +5,17 @@ links = [
     {"link": "https://youtu.be/xCBUG-hyKnc?list=PLVJX5FVbNKoLsXh-IGcLP2Jin9OHijNC9", "type": "playlist", "extension": "mp3"}
 ]#Enter links of youtube video in format of dict. {"link": videoLink, "type": "playlist or video", "extension": "mp3 or mp4 in which to download"}
 
-def download(video_link, extension):
+def download(video_link, extension):#downloading function
     try:
-        youtube = pytube.YouTube(video_link)
+        youtube = pytube.YouTube(video_link)#trying to fetch video or song
     except:
-        print("Invalid Link provided")
+        print("Invalid Link provided")#invalid link
         quit()
 
     try:
         os.chdir(save_path)
     except:
-        print("Wrong path provided!")
+        print("Wrong path provided!")#invalid path
         quit()
     try:
         if extension == "mp3":
@@ -24,18 +24,18 @@ def download(video_link, extension):
             video = youtube.streams.first()
         else:
             print(f"Invalid extension = {extension}")
-            print("Extension should be any of 'mp3' or 'mp4'")
+            print("Extension should be any of 'mp3' or 'mp4'")#invalid extension
             quit()
     except Exception as e:
         print(f"Error = {e}")
-        print("Check your network connection")
+        print("Check your network connection")#network error
         quit()
 
     try:
-        video.download(save_path)
-        print(f'{video.title[:40]} - {extension} downloaded to {save_path}')
+        video.download(save_path)#Downloading file
+        print(f'{video.title[:40]} - {extension} downloaded to {save_path}')#printing
     except: 
-        print(f"{video.title[:40]} - Some Error!")
+        print(f"{video.title[:40]} - Some Error!")#printing
 
 if __name__ == "__main__":
     print("A youtube video/audio downloader for you made by aryan with collab. of akshat(jrke)!")
